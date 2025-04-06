@@ -3,11 +3,15 @@ import { Button } from "components/ui/button";
 import { Card, CardContent } from "components/ui/card";
 import * as FramerMotion from "framer-motion";
 import logo from "./assets/nirvana-logo.png";
-const { motion } = FramerMotion;
+import { Menu, X } from "lucide-react"; // for icons
+
 import gallery1 from "./assets/gallery1.jpg";
 import gallery2 from "./assets/gallery2.jpg";
 import gallery3 from "./assets/gallery3.jpg";
 import gallery4 from "./assets/gallery4.jpg";
+const { motion } = FramerMotion;
+
+
 
 
 export default function NirvanaFest() {
@@ -33,10 +37,19 @@ export default function NirvanaFest() {
 
     return () => clearInterval(interval);
   }, []);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white px-6 py-10 font-sans">
       <header className="text-center mb-16">
+      <div className="absolute top-6 left-6 z-50">
+        <button onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? <X size={32} /> : <Menu size={32} />}
+        </button>
+      </div>
+
         <motion.img 
           src={logo} 
           alt="Nirvana Logo" 
@@ -72,6 +85,22 @@ export default function NirvanaFest() {
           </Button>
         </motion.div>
       </header>
+
+      {/*menu button */}
+      <motion.nav
+        initial={{ x: "100%" }}
+        animate={{ x: menuOpen ? 0 : "100%" }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="fixed top-0 right-0 h-full w-2/3 sm:w-1/3 bg-black/90 text-white z-40 p-8 backdrop-blur-lg shadow-lg"
+      >
+        <ul className="space-y-6 text-lg">
+          <li><a href="#" onClick={() => setMenuOpen(false)}>Home</a></li>
+          <li><a href="#countdown" onClick={() => setMenuOpen(false)}>Countdown</a></li>
+          <li><a href="#events" onClick={() => setMenuOpen(false)}>Events</a></li>
+          <li><a href="#register" onClick={() => setMenuOpen(false)}>Register</a></li>
+          <li><a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a></li>
+        </ul>
+      </motion.nav>
 
       {/* Countdown Timer */}
       <section className="text-center mb-20">
@@ -115,6 +144,7 @@ export default function NirvanaFest() {
 
       {/* Gallery Preview */}
       <section className="text-center mb-20">
+      
         <h2 className="text-4xl font-extrabold mb-6 text-yellow-300">Gallery Preview</h2>
         <motion.div 
           className="grid grid-cols-2 md:grid-cols-4 gap-4"
@@ -123,18 +153,40 @@ export default function NirvanaFest() {
           variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
         >
           {[gallery1, gallery2, gallery3, gallery4].map((img) => (
-            <motion.div
-              key={img}
-              className="h-40 bg-white/10 rounded-xl shadow-inner flex items-center justify-center text-white text-lg"
-              variants={{ hidden: { opacity: 0, scale: 0.8 }, visible: { opacity: 1, scale: 1 } }}
-              transition={{ duration: 0.5 }}
-            >
-              Image {img}
-            </motion.div>
-          ))}
+          <motion.div
+            key={img}
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            className="h-40 bg-white/10 rounded-xl shadow-inner flex items-center justify-center text-white text-lg cursor-pointer transition-transform"
+            onClick={() => setModalImage(require('./assets/gallery1.jpg'))}
+          >
+            Image {img}
+          </motion.div>
+        ))}
+
+
+        
         </motion.div>
       </section>
-
+      {modalImage && (
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          onClick={() => setModalImage(null)}
+        >
+          <div
+            className="relative bg-white rounded-xl overflow-hidden max-w-3xl w-full shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img src={modalImage} alt="Preview" className="w-full object-contain max-h-[80vh]" />
+            <button
+              onClick={() => setModalImage(null)}
+              className="absolute top-2 right-2 bg-black/70 text-white rounded-full p-2 hover:bg-black"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
       {/* Sponsors */}
       <section className="text-center mb-20">
         <h2 className="text-4xl font-extrabold mb-6 text-pink-400">Our Sponsors</h2>
@@ -172,6 +224,7 @@ export default function NirvanaFest() {
         <p className="text-lg">Email: <a href="mailto:nirvanafest@jnu.ac.in" className="underline text-blue-400">nirvanafest@jnu.ac.in</a></p>
         <p className="text-lg">Phone: +91 9876543210</p>
       </section>
+      
 
       {/* Footer */}
       <footer className="text-center text-sm text-gray-300 border-t border-gray-700 pt-6">
