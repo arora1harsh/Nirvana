@@ -4,6 +4,11 @@ import { Card, CardContent } from "components/ui/card";
 import * as FramerMotion from "framer-motion";
 import logo from "./assets/nirvana-logo.png";
 const { motion } = FramerMotion;
+import gallery1 from "./assets/gallery1.jpg";
+import gallery2 from "./assets/gallery2.jpg";
+import gallery3 from "./assets/gallery3.jpg";
+import gallery4 from "./assets/gallery4.jpg";
+
 
 export default function NirvanaFest() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
@@ -117,7 +122,7 @@ export default function NirvanaFest() {
           whileInView="visible"
           variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
         >
-          {[1, 2, 3, 4].map((img) => (
+          {[gallery1, gallery2, gallery3, gallery4].map((img) => (
             <motion.div
               key={img}
               className="h-40 bg-white/10 rounded-xl shadow-inner flex items-center justify-center text-white text-lg"
